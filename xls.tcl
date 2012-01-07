@@ -32,7 +32,7 @@ proc xls {{el row} {row 0} {column 0} {frame "."} {parent "entry"} {depth 0}} {
 	    grid_defaults .$entryname $row $column
 	    cd $f
 	    set addition [xls [changedir $el] $row $column $frame "$parent$entryname" [expr $depth + 1]]
-	    set $el [expr $[set el] + $addition + 1]
+	    set $[changedir $el] [expr $[changedir $el] + $addition]
 	    cd ..
 	    if { $el == "column" } {
 		set frame $oldframe
