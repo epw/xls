@@ -12,11 +12,14 @@ proc grid_defaults {slave row column {in "."}} {
     grid $slave -in $in -row $row -column $column -sticky n -ipadx 10
 }
 
-proc xls {{el row} {row 0} {column 0} {frame "."}} {
+proc xls {{el row} {row 0} {column 0} {frame "."} {parent "entry"} {depth 0}} {
     foreach f [glob -nocomplain *] {
 	set $el [expr $[set el] + 1]
-	set entryname entry[regsub -all {[^A-Za-z0-9]} $f _]
-	if { [file type $f] == "directory" } {
+	if { $row > 40 || $column > 10 } {
+	    break
+	}
+	set entryname [concat $parent [regsub -all {[^A-Za-z0-9]} $f _]]
+	if { [file type $f] == "directory" && $depth < 3 } {
 	    if { $el == "column" } {
 		frame .frm$entryname
 		grid_defaults .frm$entryname $row $column $frame
@@ -28,7 +31,7 @@ proc xls {{el row} {row 0} {column 0} {frame "."}} {
 	    label .$entryname -text $f/ -relief groove
 	    grid_defaults .$entryname $row $column
 	    cd $f
-	    set addition [xls [changedir $el] $row $column $frame]
+	    set addition [xls [changedir $el] $row $column $frame "$parent$entryname" [expr $depth + 1]]
 	    set $el [expr $[set el] + $addition + 1]
 	    cd ..
 	    if { $el == "column" } {
@@ -39,7 +42,7 @@ proc xls {{el row} {row 0} {column 0} {frame "."}} {
 	    grid_defaults .$entryname $row $column
 	}
     }
-    return [set [set el]]
+    return [set [changedir $el]]
 }
 
 proc usage_exit {name} {
