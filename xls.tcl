@@ -47,13 +47,25 @@ proc usage_exit {name} {
     exit 1
 }
 
+proc does_not_exist_exit {name file} {
+    puts "Directory $file does not exist."
+    usage_exit $name
+}
+
+proc not_directory_exit {name file} {
+    puts "$file is not a directory and cannot be listed."
+    usage_exit $name
+}
+
 if { $argc > 0 } {
     if { [lsearch -exact [list -h -? -help --help] [lindex $argv 0]] != -1} {
 	usage_exit $argv0
     }
-    if { ![file exists [lindex $argv 0]]
-	 || [file type [lindex $argv 0]] != "directory" } {
-	usage_exit $argv0
+    if { ![file exists [lindex $argv 0]] } {
+	does_not_exist_exit $argv0 [lindex $argv 0]
+    }
+    if { [file type [lindex $argv 0]] != "directory" } {
+	not_directory_exit $argv0 [lindex $argv 0]
     }
     cd [lindex $argv 0]
 }
