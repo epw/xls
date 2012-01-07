@@ -1,0 +1,28 @@
+This program uses Tcl/Tk to create a window listing a directory
+graphically. It lays the files out vertically, as the standard ls
+program does, but directory contents are listed horizontally after the
+name. Further subdirectories continue to alternate the direction.
+
+For example, if a directory contains the files "a", "b", and "c", as
+well as the subdirectories "dir_d/" and "dir_e/", and dir_d contains
+the files f and g, the display will roughly appear as:
+
+|---------------|
+| a             |
+| b             |
+| c             |
+| dir_d/   f  g |
+| dir_e/        |
+|---------------|
+
+xls has one optional argument, the directory to list. If omitted, it
+will list the current directory.
+
+xls should run as long as a recent version of Tk is installed on the
+system. At the time of writing, Tk 8.5 was used.
+
+To install, run
+   $ chmod +x xls.tcl
+and copy xls.tcl to a bin/ directory such as $HOME/bin or
+/usr/local/bin . It can then be executed with
+   $ xls.tcl
