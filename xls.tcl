@@ -25,7 +25,7 @@ proc xls {{el row} {row 0} {column 0} {frame "."}} {
 		set oldcolumn $column
 		set frame .frm$entryname
 	    }
-	    label .$entryname -text $f/ -font {TkDefaultFont 10 bold} -relief groove
+	    label .$entryname -text $f/ -relief groove
 	    grid_defaults .$entryname $row $column
 	    cd $f
 	    set addition [xls [changedir $el] $row $column $frame]
@@ -42,7 +42,19 @@ proc xls {{el row} {row 0} {column 0} {frame "."}} {
     return [set [set el]]
 }
 
+proc usage_exit {name} {
+    puts [concat "Usage: $name " {[directory]}]
+    exit 1
+}
+
 if { $argc > 0 } {
+    if { [lsearch -exact [list -h -? -help --help] [lindex $argv 0]] != -1} {
+	usage_exit $argv0
+    }
+    if { ![file exists [lindex $argv 0]]
+	 || [file type [lindex $argv 0]] != "directory" } {
+	usage_exit $argv0
+    }
     cd [lindex $argv 0]
 }
 xls
